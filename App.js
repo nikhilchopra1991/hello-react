@@ -1,27 +1,59 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+const Header = () => {
+    return(
+        <div className="heading">
+        <div className="logo-container">
+            <img 
+                src="https://img.freepik.com/premium-vector/food-ordering-app-logo-with-points-fork-shapes-center_666184-195.jpg"
+                className="logo" >
+            </img>
+        </div>
+        <div className="nav-items">
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Contact Us</li>
+                <li>Cart</li>
+            </ul>
+        </div>
+        </div>
+    )
+}
+
+const AppLayout = () => {
+    return (
+        <div className="app">
+            <Header></Header>
+        </div>
+    )
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<AppLayout></AppLayout>);
+    
 
 // two types of component
 // functional component
 // class component
 
-const TitleComponent = () => {
-    return <h1>Hello from React Title</h1>
-}
+// const TitleComponent = () => {
+//     return <h1>Hello from React Title</h1>
+// }
 
-const HeadingComponent = () => {
-    return (
-        <div id="container">
-            {/* <TitleComponent /> */}
-            <h1>Hello from Heading Component</h1>
-        </div>
-    );
-}
+// const HeadingComponent = () => {
+//     return (
+//         <div id="container">
+//             {/* <TitleComponent /> */}
+//             <h1>Hello from Heading Component</h1>
+//         </div>
+//     );
+// }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// const root = ReactDOM.createRoot(document.getElementById('root'));
 
-root.render(<HeadingComponent />);
+// root.render(<HeadingComponent />);
 
 // React.createElement => is object => which is rendered as HTMLElement
 // const heading = React.createElement('h1',{ id: 'heading', className: 'heading' }, 'Hello World from React App');
