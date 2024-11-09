@@ -39,6 +39,7 @@
     width: 200px;
     margin: 5px;
     padding: 5px;
+    background-color:lightgrey;
 }
 
 .res-card:hover{
@@ -49,4 +50,22 @@
 .res-logo {
     height: 130px;
     width: 100%;
+}
+
+.h4 {
+    overflow-wrap: break-word;
+}
+
+.shimmer-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 5px;
+}
+
+.shimmer-card {
+    height: 400px;
+    width: 200px;
+    margin: 5px;
+    padding: 5px;
+    background-color:lightgrey;
 }
