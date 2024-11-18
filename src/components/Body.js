@@ -1,14 +1,19 @@
-import RestaurantCard from "./RestaurantCard";
-import { useEffect, useState } from "react"; // Concentrate on named import, hooks are just normal JS functions
+import RestaurantCard, {usePromotedlabel} from "./RestaurantCard";
+import { useContext, useEffect, useState } from "react"; // Concentrate on named import, hooks are just normal JS functions
 import { SWIGGY_BASE_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
     const [listOfRestaurants, setlistOfRestaurants] = useState([]);
     const [filteredListOfRestaurants, setFilteredListOfRestaurants] = useState([]);
     const [inputValue, setInputValue] = useState("");
+
+    const RestaurantCardPromoted = usePromotedlabel(RestaurantCard);
+
+    const {userName, setUserName} = useContext(UserContext);
 
     console.log("rerendered");
     useEffect(() => {
@@ -37,10 +42,10 @@ const Body = () => {
     ) :
      (
         <div className="body">
-            <div className="filter">
-                <div className="search">
+            <div className="flex">
+                <div className="m-4 p-4">
                     <input 
-                        className="search-box" 
+                        className="m-4 border border-solid border-black" 
                         value={inputValue}
                         onChange={(e) => {
                             setInputValue(e.target.value);
@@ -48,7 +53,7 @@ const Body = () => {
                     >
                     </input>
                     <button 
-                        className="search-btn"
+                        className="bg-green-300 px-4 py-2 rounded-lg"
                         onClick={() => {
                             filteredListOfRes = listOfRestaurants.filter(x => x.info?.name.toLowerCase().includes(inputValue.toLowerCase()));
                             setFilteredListOfRestaurants(filteredListOfRes);
@@ -57,22 +62,39 @@ const Body = () => {
                         Search Over Here
                     </button>
                 </div>
-                <div>
-                <button 
-                    className="filter-btn"
-                    onClick={() => {
-                        const mostStarRatedData = filteredListOfRestaurants.filter(x => x.info.avgRating > 4.2);
-                        setFilteredListOfRestaurants(mostStarRatedData);
-                    }}
-                >
-                    Top Rated Restaurants
-                </button>
+                <div className="m-4 p-4">
+                    <button 
+                        className="bg-blue-300 px-4 py-2 my-2 rounded-lg"
+                        onClick={() => {
+                            const mostStarRatedData = filteredListOfRestaurants.filter(x => x.info.avgRating > 4.2);
+                            setFilteredListOfRestaurants(mostStarRatedData);
+                        }}
+                    >
+                        Top Rated Restaurants
+                    </button>
+                </div>
+                <div className="m-4 p-4">
+                    <label>User: </label>
+                <input 
+                        className="m-4 border border-solid border-black" 
+                        value={userName}
+                        onChange={(e) => {
+                            setUserName(e.target.value);
+                        }}
+                    >
+                    </input>
                 </div>
                 
             </div>
-            <div className="res-container">
+            <div className="flex flex-wrap">
                 {filteredListOfRestaurants.map(restaurant => 
-                    <Link to={"/restaurants/" + restaurant.info.id} key={restaurant.info.id}  ><RestaurantCard data={restaurant}></RestaurantCard></Link>
+                    <Link to={"/restaurants/" + restaurant.info.id} key={restaurant.info.id}>
+                        {restaurant.info.isOpen ? 
+                            <RestaurantCardPromoted data={restaurant}></RestaurantCardPromoted> : 
+                            <RestaurantCard data={restaurant}></RestaurantCard>
+                        }
+                        
+                    </Link>
                 )}
             </div>
         </div>

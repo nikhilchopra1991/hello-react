@@ -3,47 +3,36 @@ import {SWIGGY_MENU_ITEMS_URL} from "../utils/constants";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
+import RestaurantCategory from "./RestaurantCategory";
 
 const RestaurantMenu = () => {
-    // const [menuItems, setMenuItems] = useState(null);
+    const [showIndex, setShowIndex] = useState(null);
     const {resId} = useParams();
-    console.log(resId);
     
     menuItems = useRestaurantMenu(resId);
-    // Below code is moved to Hook useRestaurantMenu
-    // useEffect(() => {
-    //     fetchMenuItems();
-    //     console.log(menuItems);
-    // },[]);
-
-    // const fetchMenuItems = async () => {
-    //     const data = (await fetch(SWIGGY_MENU_ITEMS_URL + resId));
-    //     const items = await data.json();
-    //     setMenuItems(items.data);
-    // }
 
     if (menuItems === null) return <Shimmer></Shimmer>;
 
-
     const { name, cuisines, costForTwoMessage } = menuItems?.cards[2]?.card?.card?.info;
-    const {itemCards} = menuItems?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
+    const categories = menuItems?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+        c => c.card?.card?.["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+    );
 
     return (
-        <div className="res-menu-container">
-            <h4>{name}</h4>
-            <p>{cuisines.join(", ")} - {costForTwoMessage}</p>
-            <h4>Menu</h4>
-            <ul>
-                {
-                    itemCards.map(item => (
-                        <li key={item?.card?.info?.id}>{item?.card?.info?.name} - {" Rs."} {item?.card?.info?.defaultPrice/100 || item?.card?.info?.price/100}</li>
-                    ))
-                }
-            </ul>
+        <div className="text-center">
+            <h4 className="font-extrabold text-2xl text-center p-4">{name}</h4>
+            <p className="text-center font-bold">{cuisines.join(", ")} - {costForTwoMessage}</p>
+            {categories.map((category, index) => (
+                <RestaurantCategory 
+                    key={category.card?.card?.title}
+                    data={category.card?.card} 
+                    showItems = {index === showIndex ? true : false}
+                    setShowIndex = {() => setShowIndex(index)}
+                />
+            ))}
+            
         </div>
     )
 }
-
-// data.cards[4].groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards
 
 export default RestaurantMenu;
